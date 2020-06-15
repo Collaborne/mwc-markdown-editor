@@ -1,0 +1,89 @@
+{
+  "name": "mwc-markdown-editor",
+  "version": "0.0.0",
+  "description": "A markdown editor following Material Design spec",
+  "author": "mwc-markdown-editor",
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "module": "index.js",
+  "scripts": {
+    "start": "concurrently --kill-others --names tsc,es-dev-server \"npm run tsc:watch\" \"es-dev-server --app-index demo/index.html --node-resolve --open --watch\"",
+    "tsc:watch": "tsc --watch",
+    "lint:eslint": "eslint --ext .ts,.html . --ignore-path .gitignore",
+    "format:eslint": "eslint --ext .ts,.html . --fix --ignore-path .gitignore",
+    "lint": "npm run lint:eslint",
+    "format": "npm run format:eslint",
+    "test": "tsc && karma start --coverage",
+    "test:watch": "concurrently --kill-others --names tsc,karma \"npm run tsc:watch\" \"karma start --auto-watch=true --single-run=false\"",
+    "storybook": "concurrently --kill-others --names tsc,storybook \"npm run tsc:watch\" \"start-storybook --node-resolve --watch --open\"",
+    "storybook:build": "build-storybook"
+  },
+  "dependencies": {
+    "@material/mwc-button": "^0.15.0",
+    "@material/mwc-dialog": "^0.15.0",
+    "@material/mwc-icon": "^0.15.0",
+    "@material/mwc-textfield": "^0.15.0",
+    "@types/prosemirror-inputrules": "^1.0.2",
+    "es-dev-commonjs-transformer": "github:Collaborne/es-dev-commonjs-transformer",
+    "lit-element": "^2.2.1",
+    "lit-html": "^1.1.2",
+    "prosemirror-commands": "^1.1.4",
+    "prosemirror-dropcursor": "^1.3.2",
+    "prosemirror-example-setup": "^1.1.2",
+    "prosemirror-gapcursor": "^1.1.5",
+    "prosemirror-history": "^1.1.3",
+    "prosemirror-inputrules": "^1.1.2",
+    "prosemirror-keymap": "^1.1.4",
+    "prosemirror-markdown": "^1.4.5",
+    "prosemirror-menu": "^1.1.4",
+    "prosemirror-schema-list": "^1.1.2",
+    "prosemirror-state": "^1.3.3",
+    "prosemirror-view": "^1.14.13",
+    "save-dev": "0.0.1-security"
+  },
+  "devDependencies": {
+    "@open-wc/demoing-storybook": "^2.0.0",
+    "@open-wc/eslint-config": "^2.0.0",
+    "@open-wc/testing": "^2.0.0",
+    "@open-wc/testing-karma": "^3.0.0",
+    "@rollup/plugin-commonjs": "^13.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@types/node": "13.11.1",
+    "@types/prosemirror-commands": "^1.0.1",
+    "@types/prosemirror-dropcursor": "^1.0.0",
+    "@types/prosemirror-gapcursor": "^1.0.1",
+    "@types/prosemirror-history": "^1.0.1",
+    "@types/prosemirror-keymap": "^1.0.2",
+    "@types/prosemirror-menu": "^1.0.2",
+    "@types/prosemirror-schema-list": "^1.0.1",
+    "@types/prosemirror-state": "^1.2.4",
+    "@types/prosemirror-view": "^1.11.4",
+    "@typescript-eslint/eslint-plugin": "^2.20.0",
+    "@typescript-eslint/parser": "^2.20.0",
+    "concurrently": "^5.1.0",
+    "deepmerge": "^3.2.0",
+    "es-dev-server": "^1.23.0",
+    "es-dev-server-import-json": "^2.1.0",
+    "eslint": "^6.1.0",
+    "husky": "^1.0.0",
+    "lint-staged": "^8.0.0",
+    "tslib": "^1.11.0",
+    "typescript": "~3.8.2"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@open-wc/eslint-config"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint",
+      "git add"
+    ]
+  }
+}

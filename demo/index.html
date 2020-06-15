@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+	<meta charset="utf-8">
+	<style>
+		body {
+			background: #fafafa;
+		}
+		table {
+			width: 100%;
+		}
+		td {
+			width: 50%;
+			vertical-align: top;
+		}
+		#markdown {
+			background: #eee;
+			color: #666;
+			padding: 16px;
+			white-space: pre-wrap;
+			font-family: monospace;
+		}
+	</style>
+	<link href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" rel="stylesheet">
+</head>
+<body>
+	<table>
+		<tr>
+			<td>
+				<div id="demo"></div>
+			</td>
+			<td>
+				<div id="markdown"></div>
+			</td>
+		</tr>
+	</table>
+	
+	<script type="module">
+		import { html, render } from 'lit-html';
+		import '../dist/mwc-markdown-editor.js';
+
+		const renderMarkdown = markdown => {
+			render(
+				html`${markdown}`,
+				document.querySelector('#markdown')
+			);
+		};
+
+		let markdown = 'Hi **you**';
+		const onInput = e => {
+			markdown = e.detail.value;
+			renderMarkdown(markdown);
+		};
+		renderMarkdown(markdown);
+
+		render(
+			html`
+				<style>
+					mwc-markdown-editor {
+						--mdc-theme-primary: red;
+						--markdown-editor-outline-idle-border-color: #900;
+						--markdown-editor-outline-hover-border-color: #c00;
+					}
+				</style>
+				<mwc-markdown-editor
+					.value="${markdown}"
+					promptSaveAction="Save (custom)"
+					@mwc-markdown-editor-input="${onInput}"
+				></mwc-markdown-editor>
+			`,
+			document.querySelector('#demo')
+		);
+	</script>
+</body>
+</html>
