@@ -27,6 +27,10 @@ export class PromptDialog extends LitElement {
 			#value {
 				width: 100%;
 			}
+
+			mwc-button {
+				--mdc-theme-primary: var(--mwc-markdown-editor-prompt-dialog-button-primary-color);
+			}
 		`;
 	}
 
