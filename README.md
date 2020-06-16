@@ -12,7 +12,7 @@ npm i mwc-markdown-editor
 ## Usage
 ```html
 <script type="module">
-  import 'mwc-markdown-editor/mwc-markdown-editor.js';
+  import 'mwc-markdown-editor';
 </script>
 
 <mwc-markdown-editor></mwc-markdown-editor>
