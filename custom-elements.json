@@ -27,6 +27,11 @@
 			"slots": [],
 			"cssProperties": [
 				{
+					"name": "--mdc-theme-primary",
+					"description": "Primary color",
+					"type": "Color"
+				},
+				{
 					"name": "--markdown-editor-outline-idle-border-color",
 					"description": "Outline color without hover/focus",
 					"type": "Color"
