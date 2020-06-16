@@ -370,7 +370,6 @@ export const PROSEMIRROR_STYLES = css`
     color: black;
     background-clip: padding-box;
     padding: 5px 0;
-    margin-bottom: 23px;
   }
 
   #editor[disabled] .ProseMirror-menubar {
