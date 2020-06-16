@@ -360,13 +360,16 @@ export const PROSEMIRROR_STYLES = css`
     font-style: italic;
   }
 
-  #editor,
-  .editor {
+  #editor, .editor {
     background: white;
     color: black;
     background-clip: padding-box;
     padding: 5px 0;
     margin-bottom: 23px;
+  }
+
+  #editor[disabled] .ProseMirror-menubar {
+    display: none!important;
   }
 
   drop-down-editor rich-text .inline-component-button,

@@ -63,7 +63,7 @@ export class MarkdownEditor extends LitElement {
 				border: 1px solid var(--markdown-editor-outline-idle-border-color, rgba(0, 0, 0, 0.38));
 			}
 
-			#editor:hover .notch-outlined {
+			#editor:not([disabled]):not([focused]):hover .notch-outlined {
 				border-color: var(--markdown-editor-outline-hover-border-color, rgba(0, 0, 0, 0.87));
 			}
 			#editor[focused] .notch-outlined {
@@ -91,7 +91,7 @@ export class MarkdownEditor extends LitElement {
 
 	protected render() {
 		return html`
-			<div id="editor" ?focused="${this.focused}">
+			<div id="editor" ?focused="${this.focused}" ?disabled="${this.disabled}">
 				<div class="notch-outlined"></div>
 			</div>
 			<prompt-dialog
