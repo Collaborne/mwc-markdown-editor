@@ -32,6 +32,12 @@ module.exports = config => {
         ],
         nodeResolve: true,
       },
+
+      coverageIstanbulReporter: {
+        thresholds: {
+          emitWarning: true,
+        },
+      },
     }),
   );
   return config;
