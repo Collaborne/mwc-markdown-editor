@@ -17,4 +17,7 @@ module.exports = {
     'import/named': 'off',
     'import/no-unresolved': 'off',
   },
+  env: {
+    browser: true,
+  },
 };
