@@ -39,8 +39,7 @@
     "prosemirror-menu": "^1.1.4",
     "prosemirror-schema-list": "^1.1.2",
     "prosemirror-state": "^1.3.3",
-    "prosemirror-view": "^1.14.13",
-    "save-dev": "0.0.1-security"
+    "prosemirror-view": "^1.14.13"
   },
   "devDependencies": {
     "@open-wc/demoing-storybook": "^2.0.0",
