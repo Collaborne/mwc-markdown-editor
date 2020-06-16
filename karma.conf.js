@@ -38,6 +38,8 @@ module.exports = config => {
           emitWarning: true,
         },
       },
+
+      browserNoActivityTimeout: 60000,
     }),
   );
   return config;
