@@ -1,10 +1,9 @@
-dist: trusty
+os: linux
+dist: bionic
 group: beta
 language: node_js
 node_js:
-- node
-addons:
-  chrome: beta
+- lts/erbium
 cache:
   directories:
   - node_modules
