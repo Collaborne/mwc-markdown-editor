@@ -17,7 +17,8 @@
     "test": "tsc && karma start --coverage",
     "test:watch": "concurrently --kill-others --names tsc,karma \"npm run tsc:watch\" \"karma start --auto-watch=true --single-run=false\"",
     "storybook": "concurrently --kill-others --names tsc,storybook \"npm run tsc:watch\" \"start-storybook --node-resolve --watch --open\"",
-    "storybook:build": "build-storybook"
+    "storybook:build": "build-storybook",
+    "storybook:deploy": "storybook-to-ghpages --script storybook:build"
   },
   "dependencies": {
     "@material/mwc-button": "^0.15.0",
@@ -48,6 +49,7 @@
     "@open-wc/testing-karma": "^3.0.0",
     "@rollup/plugin-commonjs": "^13.0.0",
     "@rollup/plugin-json": "^4.1.0",
+    "@storybook/storybook-deployer": "^2.8.6",
     "@types/node": "13.11.1",
     "@types/prosemirror-commands": "^1.0.1",
     "@types/prosemirror-dropcursor": "^1.0.0",
