@@ -1,7 +1,7 @@
 import { html, fixture, expect } from '@open-wc/testing';
 
 import { MarkdownEditor } from '../src/mwc-markdown-editor';
-import '../mwc-markdown-editor';
+import '../index';
 
 describe('MarkdownEditor', () => {
 	it('sets the value via attribute', async () => {
