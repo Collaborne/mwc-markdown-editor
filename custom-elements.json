@@ -1,32 +1,52 @@
 {
-  "version": 2,
-  "tags": [
-    {
-      "name": "mwc-markdown-editor",
-      "description": "A component with a title and an action counter",
-      "properties": [
-        {
-          "name": "title",
-          "type": "String",
-          "description": "The title of your component",
-          "default": "Hey there"
-        },
-        {
-          "name": "counter",
-          "type": "Number",
-          "description": "An action counter",
-          "default": 0
-        }
-      ],
-      "events": [],
-      "slots": [],
-      "cssProperties": [
-        {
-          "name": "--mwc-markdown-editor-text-color",
-          "description": "Main Text Color",
-          "type": "Color"
-        }
-      ]
-    }
-  ]
+	"version": 2,
+	"tags": [
+		{
+			"name": "mwc-markdown-editor",
+			"description": "A markdown editor following Material Design spec",
+			"properties": [
+				{
+					"name": "value",
+					"type": "String",
+					"description": "Markdown content",
+					"default": ""
+				},
+				{
+					"name": "disabled",
+					"type": "Boolean",
+					"description": "Disabled element",
+					"default": "false"
+				}
+			],
+			"events": [
+				{
+					"name": "mwc-markdown-editor-input",
+					"description": "Fires whenever the value in the editor changes"
+				}
+			],
+			"slots": [],
+			"cssProperties": [
+				{
+					"name": "--markdown-editor-outline-idle-border-color",
+					"description": "Outline color without hover/focus",
+					"type": "Color"
+				},
+				{
+					"name": "--markdown-editor-outline-hover-border-color",
+					"description": "Outline color when componened is hovered",
+					"type": "Color"
+				},
+				{
+					"name": "--markdown-editor-outline-focused-border-color",
+					"description": "Outline color when component is focused",
+					"type": "Color"
+				},
+				{
+					"name": "--mwc-markdown-editor-prompt-dialog-button-primary-color",
+					"description": "Primary color for the [save] button in the link prompt dialog",
+					"type": "Color"
+				}
+			]
+		}
+	]
 }

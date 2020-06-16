@@ -1,6 +1,6 @@
 ```js script
 import { html } from '@open-wc/demoing-storybook';
-import { boolean, withKnobs } from 'storybook-prebuilt/addon-knobs';
+import { withKnobs, withWebComponentsKnobs } from '@open-wc/demoing-storybook';
 
 import '../dist/index.js';
 
@@ -10,7 +10,7 @@ export default {
   options: {
     selectedPanel: 'storybookjs/knobs/panel',
   },
-  decorators: [withKnobs],
+  decorators: [withKnobs, withWebComponentsKnobs],
 };
 ```
 
@@ -32,9 +32,6 @@ import 'mwc-markdown-editor/mwc-markdown-editor.js';
 
 ```js preview-story
 export const Simple = () => html`
-  <mwc-markdown-editor
-    value="Hi **you**"
-    .disabled="${boolean('disabled', false)}"
-  ></mwc-markdown-editor>
+  <mwc-markdown-editor></mwc-markdown-editor>
 `;
 ```
