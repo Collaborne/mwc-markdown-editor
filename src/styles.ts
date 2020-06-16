@@ -46,6 +46,11 @@ export const PROSEMIRROR_STYLES = css`
     margin-top: 10px;
   }
 
+  .ProseMirror a {
+    color: var(--markdown-editor-typography-anchor-color, -webkit-link);
+    text-decoration: var(--markdown-editor-typography-anchor-text-decoration);
+  }
+
   .ProseMirror p {
     margin-bottom: 1em;
   }

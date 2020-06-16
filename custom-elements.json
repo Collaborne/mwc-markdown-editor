@@ -47,9 +47,18 @@
 					"type": "Color"
 				},
 				{
-					"name": "--mwc-markdown-editor-prompt-dialog-button-primary-color",
+					"name": "--markdown-editor-prompt-dialog-button-primary-color",
 					"description": "Primary color for the [save] button in the link prompt dialog",
 					"type": "Color"
+				},
+				{
+					"name": "--markdown-editor-typography-anchor-color",
+					"description": "Text color of anchors in the richtext",
+					"type": "Color"
+				},
+				{
+					"name": "--markdown-editor-typography-anchor-text-decoration",
+					"description": "Text decoration for anchors in the richtext"
 				}
 			]
 		}
