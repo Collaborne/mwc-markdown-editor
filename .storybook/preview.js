@@ -5,6 +5,9 @@ addParameters({
 	docs: {
 		iframeHeight: '200px',
 	},
+	options: {
+		enableShortcuts: false,
+	},
 });
 
 async function run() {
