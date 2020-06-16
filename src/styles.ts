@@ -11,19 +11,19 @@ export const PROSEMIRROR_STYLES = css`
     line-height: 1.2;
     outline: none;
     font-family: var(
-      --mdc-typography-markdown-editor-font-family,
+      --markdown-editor-typography-font-family,
       var(--mdc-typography-font-family, Roboto, sans-serif)
     );
     font-size: var(
-      --mdc-typography-markdown-editor-font-size,
+      --markdown-editor-typography-font-size,
       var(--mdc-typography-subtitle1-font-size, 1rem)
     );
     font-weight: var(
-      --mdc-typography-markdown-editor-font-weight,
+      --markdown-editor-typography-font-weight,
       var(--mdc-typography-subtitle1-font-weight, 400)
     );
     letter-spacing: var(
-      --mdc-typography-markdown-editor-letter-spacing,
+      --markdown-editor-typography-letter-spacing,
       var(--mdc-typography-subtitle1-letter-spacing, 0.009375em)
     );
   }
