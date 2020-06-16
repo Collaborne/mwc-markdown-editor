@@ -3,6 +3,8 @@ group: beta
 language: node_js
 node_js:
 - node
+addons:
+  chrome: beta
 cache:
   directories:
   - node_modules
