@@ -4,6 +4,8 @@ import { MarkType, NodeType, Schema } from 'prosemirror-model';
 import { wrapInList } from 'prosemirror-schema-list';
 import { EditorState, Transaction } from 'prosemirror-state';
 
+import { HyperlinkDialogSaveResponse } from '../hyperlink/dialog';
+
 interface MarkItemIcon {
 	dom: HTMLElement;
 }
@@ -13,6 +15,7 @@ interface MarkItemOption {
 }
 
 type Cmd<S extends Schema> = (state: EditorState<S>, dispatch?: (tr: Transaction<S>) => void) => boolean;
+type PromptHyperlink = (text: string) => Promise<HyperlinkDialogSaveResponse | undefined>;
 
 function createIcon(icon: string): MarkItemIcon {
 	const iconEl = document.createElement('mwc-icon');
@@ -55,7 +58,7 @@ function markItem<S extends Schema>(markType: MarkType<S>, options: MarkItemOpti
 	return cmdItem(toggleMark(markType), passedOptions);
 }
 
-function linkItem<S extends Schema>(markType: MarkType<S>, promptValue: PromptValue) {
+function linkItem<S extends Schema>(markType: MarkType<S>, promptHyperlink: PromptHyperlink) {
 	return new MenuItem({
 		title: 'Add or remove link',
 		icon: createIcon('insert_link'),
@@ -70,8 +73,16 @@ function linkItem<S extends Schema>(markType: MarkType<S>, promptValue: PromptVa
 				toggleMark(markType)(state, dispatch);
 				return true;
 			}
-			const href = await promptValue();
-			toggleMark(markType, { href })(view.state, view.dispatch);
+
+			const { from, to } = state.selection;
+			const text = state.doc.textBetween(from, to);
+		
+			const response = await promptHyperlink(text);
+			if (response) {
+				toggleMark(markType, {
+					href: response.href,
+				})(view.state, view.dispatch);
+			}
 			view.focus();
 		},
 	});
@@ -81,8 +92,7 @@ function wrapListItem<S extends Schema>(nodeType: NodeType<S>, options: { [key: 
 	return cmdItem(wrapInList(nodeType, options.attrs), options);
 }
 
-type PromptValue = () => Promise<string | undefined>;
-export function buildMenuItems<S extends Schema>(schema: S, promptValue: PromptValue): { [key: string]: MenuItem } {
+export function buildMenuItems<S extends Schema>(schema: S, promptHyperlink: PromptHyperlink): { [key: string]: MenuItem } {
 	const result: { [key: string]: MenuItem } = {};
 	if (schema.marks.strong) {
 		result.toggleStrong = markItem(schema.marks.strong, {
@@ -97,7 +107,7 @@ export function buildMenuItems<S extends Schema>(schema: S, promptValue: PromptV
 		});
 	}
 	if (schema.marks.link) {
-		result.toggleLink = linkItem(schema.marks.link, promptValue);
+		result.toggleLink = linkItem(schema.marks.link, promptHyperlink);
 	}
 
 	if (schema.nodes.heading) {

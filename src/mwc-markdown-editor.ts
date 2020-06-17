@@ -14,9 +14,10 @@ import { EditorView } from 'prosemirror-view';
 
 import { buildInputRules } from './prosemirror/input-rules';
 import { buildMenuItems } from './prosemirror/menu';
-import './prosemirror/prompt-dialog';
-import { PromptDialog } from './prosemirror/prompt-dialog';
+import './hyperlink/dialog';
+import { HyperlinkDialog, HyperlinkDialogSaveResponse } from './hyperlink/dialog';
 
+import { HyperlinkPlugin } from './hyperlink/plugin';
 import { PROSEMIRROR_STYLES } from './styles';
 
 export class MarkdownEditor extends LitElement {
@@ -35,15 +36,18 @@ export class MarkdownEditor extends LitElement {
 	@property({ type: String })
 	public promptSaveAction: string = 'Save';
 
+	@property({ type: String })
+	public promptTextPlaceholder: string = 'Text to display';
+
 	private editor?: EditorView;
 
-	private promptResolve?: (value: string | undefined) => void;
+	private promptHyperlinkResolve?: (response?: HyperlinkDialogSaveResponse) => void;
 
 	@query('#editor')
 	private editorEl?: HTMLDivElement;
 
-	@query('#promptDialog')
-	private promptDialogEl?: PromptDialog;
+	@query('#promptHyperlinkDialog')
+	private promptHyperlinkDialogEl?: HyperlinkDialog;
 
 	static get styles() {
 		const STYLES = css`
@@ -94,18 +98,19 @@ export class MarkdownEditor extends LitElement {
 			<div id="editor" ?focused="${this.focused}" ?disabled="${this.disabled}">
 				<div class="notch-outlined"></div>
 			</div>
-			<prompt-dialog
-				id="promptDialog"
+			<hyperlink-dialog
+				id="promptHyperlinkDialog"
 				.cancelAction="${this.promptCancelAction}"
 				.saveAction="${this.promptSaveAction}"
+				.textPlaceholder="${this.promptTextPlaceholder}"
 				@save="${this.onPromptSave}"
 				@cancel="${this.onPromptCancel}"
-			></prompt-dialog>
+			></hyperlink-dialog>
 		`;
 	}
 
 	protected firstUpdated() {
-		const menuItems = buildMenuItems(schema, this.promptValue.bind(this));
+		const menuItems = buildMenuItems(schema, this.promptHyperlink.bind(this));
 		this.editor = new EditorView(this.editorEl!, {
 			editable: () => !this.disabled,
 			state: EditorState.create({
@@ -135,6 +140,7 @@ export class MarkdownEditor extends LitElement {
 						],
 					}),
 					history(),
+					new HyperlinkPlugin(this.promptHyperlink.bind(this)),
 				],
 			}),
 			dispatchTransaction: transaction => {
@@ -171,27 +177,27 @@ export class MarkdownEditor extends LitElement {
 		}
 	}
 
-	private promptValue() {
-		this.promptDialogEl!.show();
-		return new Promise<string>(resolve => {
-			this.promptResolve = resolve;
+	private promptHyperlink(text: string, href?: string) {
+		this.promptHyperlinkDialogEl!.show(text, href);
+		return new Promise<HyperlinkDialogSaveResponse | undefined>(resolve => {
+			this.promptHyperlinkResolve = resolve;
 		});
 	}
 
-	private onPromptSave(e: CustomEvent) {
-		if (!this.promptResolve) {
+	private onPromptSave(e: CustomEvent<HyperlinkDialogSaveResponse>) {
+		if (!this.promptHyperlinkResolve) {
 			throw new Error(`Invalid state: prompt resolves wasn't initialized`);
 		}
 
-		const { value } = e.detail;
-		this.promptResolve(value);
+		const { href, text } = e.detail;
+		this.promptHyperlinkResolve({ text, href });
 	}
 
 	private onPromptCancel() {
-		if (!this.promptResolve) {
+		if (!this.promptHyperlinkResolve) {
 			throw new Error(`Invalid state: prompt resolves wasn't initialized`);
 		}
 
-		this.promptResolve(undefined);
+		this.promptHyperlinkResolve(undefined);
 	}
 }
