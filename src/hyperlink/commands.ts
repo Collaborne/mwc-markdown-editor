@@ -25,6 +25,7 @@ export function updateLink<S extends Schema>(options: Options) {
 		const linkAttrs = {
 			...((currentMark && currentMark.attrs) || {}),
 			href: options.href,
+			title: options.href,
 		};
 		const mark = linkMark.create(linkAttrs) as Mark<S>;
 		tr.addMark(options.pos, options.pos + options.text.length, mark);

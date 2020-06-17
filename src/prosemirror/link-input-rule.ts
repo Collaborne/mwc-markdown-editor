@@ -13,15 +13,14 @@ function markInputRule<S extends Schema>(regexp: RegExp, markType: MarkType<S>, 
 			return null;
 		}
 		const oLinkString = match[0].substring(0, match[0].length - 1);
-		const oAttr =
-			attrs.type == 'email' ?
-				{
-					href: `mailto:${oLinkString}`,
-				} :
-				{
-					href: oLinkString,
-					target: '_blank',
-				};
+		const oAttr = attrs.type == 'email' ?
+			{
+				href: `mailto:${oLinkString}`,
+			} :
+			{
+				href: oLinkString,
+				target: '_blank',
+			};
 		const oLink = markType.create(oAttr);
 		const oPos = {
 			from: start,

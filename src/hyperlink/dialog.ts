@@ -8,7 +8,7 @@ import '@material/mwc-textfield';
 import { TextField } from '@material/mwc-textfield';
 
 export interface HyperlinkDialogSaveResponse {
-	text: string;
+	text: string | undefined;
 	href: string;
 }
 
@@ -19,6 +19,9 @@ export class HyperlinkDialog extends LitElement {
 
 	@property({ type: String })
 	public textPlaceholder?: string;
+
+	@property({ type: Boolean })
+	public hideText: boolean = false;
 
 	@property({ type: String })
 	private text?: string;
@@ -45,20 +48,25 @@ export class HyperlinkDialog extends LitElement {
 				display: block;
 			}
 
-			#href {
-				margin-bottom: 16px;
+			#text {
+				margin-top: 16px;
 			}
 
 			mwc-button {
 				--mdc-theme-primary: var(--markdown-editor-prompt-dialog-button-primary-color);
 			}
+
+			[hidden] {
+				display: none!important;
+			}
 		`;
 	}
 
-	public show(text: string, href: string = '') {
+	public show(text: string, href: string = '', hideText: boolean) {
 		if (this.dialogEl) {
 			this.text = text;
 			this.href = href;
+			this.hideText = hideText;
 			this.dialogEl.show();
 		}
 	}
@@ -81,6 +89,7 @@ export class HyperlinkDialog extends LitElement {
 					.value="${text}"
 					placeholder="${this.textPlaceholder}"
 					outlined
+					?hidden="${this.hideText}"
 				></mwc-textfield>
 				<mwc-button
 					slot="primaryAction"
@@ -94,7 +103,11 @@ export class HyperlinkDialog extends LitElement {
 	private onClosed(e: CustomEvent) {
 		this.href = this.hrefEl!.value;
 		// Only store text if it's changed
-		this.text = this.textEl!.value.length > 0 ? this.textEl!.value : this.href;
+		if (!this.hideText) {
+			this.text = this.textEl!.value.length > 0 ? this.textEl!.value : this.href;
+		} else {
+			this.text = undefined;
+		}
 
 		const { action } = e.detail;
 		if (action === 'save') {

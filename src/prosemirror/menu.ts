@@ -81,6 +81,7 @@ function linkItem<S extends Schema>(markType: MarkType<S>, promptHyperlink: Prom
 			if (response) {
 				toggleMark(markType, {
 					href: response.href,
+					title: response.href,
 				})(view.state, view.dispatch);
 			}
 			view.focus();

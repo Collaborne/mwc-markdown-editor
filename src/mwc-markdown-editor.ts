@@ -110,7 +110,7 @@ export class MarkdownEditor extends LitElement {
 	}
 
 	protected firstUpdated() {
-		const menuItems = buildMenuItems(schema, this.promptHyperlink.bind(this));
+		const menuItems = buildMenuItems(schema, this.promptHyperlink.bind(this, true));
 		this.editor = new EditorView(this.editorEl!, {
 			editable: () => !this.disabled,
 			state: EditorState.create({
@@ -140,7 +140,7 @@ export class MarkdownEditor extends LitElement {
 						],
 					}),
 					history(),
-					new HyperlinkPlugin(this.promptHyperlink.bind(this)),
+					new HyperlinkPlugin(this.promptHyperlink.bind(this, false)),
 				],
 			}),
 			dispatchTransaction: transaction => {
@@ -177,8 +177,8 @@ export class MarkdownEditor extends LitElement {
 		}
 	}
 
-	private promptHyperlink(text: string, href?: string) {
-		this.promptHyperlinkDialogEl!.show(text, href);
+	private promptHyperlink(hideText: boolean, text: string, href?: string) {
+		this.promptHyperlinkDialogEl!.show(text, href, hideText);
 		return new Promise<HyperlinkDialogSaveResponse | undefined>(resolve => {
 			this.promptHyperlinkResolve = resolve;
 		});

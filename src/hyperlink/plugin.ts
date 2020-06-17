@@ -1,4 +1,4 @@
-import { Node as ProseNode, ResolvedPos, Schema } from 'prosemirror-model';
+import { Node as ProseNode, Schema } from 'prosemirror-model';
 import { Plugin } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 
@@ -26,7 +26,7 @@ export class HyperlinkPlugin<S extends Schema> extends Plugin<any, S> {
 		if (response) {
 			updateLink<S>({
 				href: response.href,
-				text: response.text,
+				text: response.text!,
 				pos,
 			})(view.state, view.dispatch);
 		}
