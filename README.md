@@ -4,6 +4,8 @@ A markdown editor following [Material Design spec](http://material.io/). The edi
 
 This webcomponent follows the [open-wc](https://github.com/open-wc/open-wc) recommendation.
 
+![screenshot](doc/screenshot.png)
+
 ## Installation
 ```bash
 npm i mwc-markdown-editor
