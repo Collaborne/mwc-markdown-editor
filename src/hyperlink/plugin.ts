@@ -1,5 +1,5 @@
 import { Node as ProseNode, Schema } from 'prosemirror-model';
-import { Plugin } from 'prosemirror-state';
+import { Plugin, PluginKey } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 
 import { HyperlinkDialogSaveResponse } from './dialog';
@@ -10,11 +10,12 @@ export type PromptHyperlink = (text: string, href?: string) => Promise<Hyperlink
 export class HyperlinkPlugin<S extends Schema> extends Plugin<any, S> {
 	constructor(private promptHyperlink: PromptHyperlink) {
 		super({
+			key: new PluginKey('hyperlink'),
 			props: {
 				nodeViews: {
 					link: (node, view) => new HyperlinkMarkView(node, view, (pos: number) => this.onLinkClicked(node, view, pos)),
 				},
-			}
+			},
 		});
 	}
 
