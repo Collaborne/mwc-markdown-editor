@@ -1,10 +1,11 @@
-import { blockTypeItem, wrapItem, MenuItem, MenuItemSpec } from 'prosemirror-menu';
+import { blockTypeItem, wrapItem, MenuElement, MenuItem, MenuItemSpec } from 'prosemirror-menu';
 import { toggleMark } from 'prosemirror-commands';
+import { showInsertToolbar } from 'prosemirror-hyperlink';
 import { MarkType, NodeType, Schema } from 'prosemirror-model';
 import { wrapInList } from 'prosemirror-schema-list';
 import { EditorState, Transaction } from 'prosemirror-state';
 
-import { HyperlinkDialogSaveResponse } from '../hyperlink/dialog';
+import { ClickMenuItem } from './click-menu-item';
 
 interface MarkItemIcon {
 	dom: HTMLElement;
@@ -15,7 +16,6 @@ interface MarkItemOption {
 }
 
 type Cmd<S extends Schema> = (state: EditorState<S>, dispatch?: (tr: Transaction<S>) => void) => boolean;
-type PromptHyperlink = (text: string) => Promise<HyperlinkDialogSaveResponse | undefined>;
 
 function createIcon(icon: string): MarkItemIcon {
 	const iconEl = document.createElement('mwc-icon');
@@ -58,8 +58,8 @@ function markItem<S extends Schema>(markType: MarkType<S>, options: MarkItemOpti
 	return cmdItem(toggleMark(markType), passedOptions);
 }
 
-function linkItem<S extends Schema>(markType: MarkType<S>, promptHyperlink: PromptHyperlink) {
-	return new MenuItem({
+function linkItem<S extends Schema>(markType: MarkType<S>) {
+	return new ClickMenuItem({
 		title: 'Add or remove link',
 		icon: createIcon('insert_link'),
 		active(state: EditorState<S>) {
@@ -75,16 +75,11 @@ function linkItem<S extends Schema>(markType: MarkType<S>, promptHyperlink: Prom
 			}
 
 			const { from, to } = state.selection;
-			const text = state.doc.textBetween(from, to);
-		
-			const response = await promptHyperlink(text);
-			if (response) {
-				toggleMark(markType, {
-					href: response.href,
-					title: response.href,
-				})(view.state, view.dispatch);
-			}
-			view.focus();
+			
+			showInsertToolbar({
+				from,
+				to,
+			})(view.state, view.dispatch);
 		},
 	});
 }
@@ -93,8 +88,8 @@ function wrapListItem<S extends Schema>(nodeType: NodeType<S>, options: { [key: 
 	return cmdItem(wrapInList(nodeType, options.attrs), options);
 }
 
-export function buildMenuItems<S extends Schema>(schema: S, promptHyperlink: PromptHyperlink): { [key: string]: MenuItem } {
-	const result: { [key: string]: MenuItem } = {};
+export function buildMenuItems<S extends Schema>(schema: S): { [key: string]: MenuElement<any> } {
+	const result: { [key: string]: MenuElement<any> } = {};
 	if (schema.marks.strong) {
 		result.toggleStrong = markItem(schema.marks.strong, {
 			title: 'Toggle strong style',
@@ -108,7 +103,7 @@ export function buildMenuItems<S extends Schema>(schema: S, promptHyperlink: Pro
 		});
 	}
 	if (schema.marks.link) {
-		result.toggleLink = linkItem(schema.marks.link, promptHyperlink);
+		result.toggleLink = linkItem(schema.marks.link);
 	}
 
 	if (schema.nodes.heading) {

@@ -6,18 +6,19 @@ import { dropCursor } from 'prosemirror-dropcursor';
 import { buildKeymap } from 'prosemirror-example-setup';
 import { gapCursor } from 'prosemirror-gapcursor';
 import { history } from 'prosemirror-history';
+import { HyperlinkPlugin, ToolbarOptions, updateLink } from 'prosemirror-hyperlink';
 import { keymap } from 'prosemirror-keymap';
 import { defaultMarkdownParser, defaultMarkdownSerializer, schema } from 'prosemirror-markdown';
+import { Schema } from 'prosemirror-model';
 import { menuBar } from 'prosemirror-menu';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 
 import { buildInputRules } from './prosemirror/input-rules';
 import { buildMenuItems } from './prosemirror/menu';
-import './hyperlink/dialog';
-import { HyperlinkDialog, HyperlinkDialogSaveResponse } from './hyperlink/dialog';
+import './toolbar';
+import { HyperlinkToolbar, HyperlinkToolbarSaveResponse } from './toolbar';
 
-import { HyperlinkPlugin } from './hyperlink/plugin';
 import { PROSEMIRROR_STYLES } from './styles';
 
 export class MarkdownEditor extends LitElement {
@@ -41,13 +42,11 @@ export class MarkdownEditor extends LitElement {
 
 	private editor?: EditorView;
 
-	private promptHyperlinkResolve?: (response?: HyperlinkDialogSaveResponse) => void;
-
 	@query('#editor')
 	private editorEl?: HTMLDivElement;
 
-	@query('#promptHyperlinkDialog')
-	private promptHyperlinkDialogEl?: HyperlinkDialog;
+	@query('#toolbar')
+	private toolbarEl?: HyperlinkToolbar;
 
 	static get styles() {
 		const STYLES = css`
@@ -97,21 +96,21 @@ export class MarkdownEditor extends LitElement {
 		return html`
 			<div id="editor" ?focused="${this.focused}" ?disabled="${this.disabled}">
 				<div class="notch-outlined"></div>
+				<hyperlink-toolbar
+					id="toolbar"
+					.anchor="${this.editorEl}"
+					.cancelAction="${this.promptCancelAction}"
+					.saveAction="${this.promptSaveAction}"
+					.textPlaceholder="${this.promptTextPlaceholder}"
+					@save="${this.onSaveToolbar}"
+				></hyperlink-toolbar>
 			</div>
-			<hyperlink-dialog
-				id="promptHyperlinkDialog"
-				.cancelAction="${this.promptCancelAction}"
-				.saveAction="${this.promptSaveAction}"
-				.textPlaceholder="${this.promptTextPlaceholder}"
-				@save="${this.onPromptSave}"
-				@cancel="${this.onPromptCancel}"
-			></hyperlink-dialog>
 		`;
 	}
 
 	protected firstUpdated() {
-		const menuItems = buildMenuItems(schema, this.promptHyperlink.bind(this, true));
-		this.editor = new EditorView(this.editorEl!, {
+		const menuItems = buildMenuItems(schema);
+		this.editor = new EditorView<Schema>(this.editorEl!, {
 			editable: () => !this.disabled,
 			state: EditorState.create({
 				doc: defaultMarkdownParser.parse(this.value || ''),
@@ -140,7 +139,7 @@ export class MarkdownEditor extends LitElement {
 						],
 					}),
 					history(),
-					new HyperlinkPlugin(this.promptHyperlink.bind(this, false)),
+					new HyperlinkPlugin(schema.marks.link, this.configureToolbar.bind(this)),
 				],
 			}),
 			dispatchTransaction: transaction => {
@@ -177,27 +176,18 @@ export class MarkdownEditor extends LitElement {
 		}
 	}
 
-	private promptHyperlink(hideText: boolean, text: string, href?: string) {
-		this.promptHyperlinkDialogEl!.show(text, href, hideText);
-		return new Promise<HyperlinkDialogSaveResponse | undefined>(resolve => {
-			this.promptHyperlinkResolve = resolve;
-		});
+	private onSaveToolbar(e: CustomEvent<HyperlinkToolbarSaveResponse>) {
+		updateLink({
+			href: e.detail.href,
+			text: e.detail.text,
+		})(this.editor!.state, this.editor!.dispatch);
 	}
 
-	private onPromptSave(e: CustomEvent<HyperlinkDialogSaveResponse>) {
-		if (!this.promptHyperlinkResolve) {
-			throw new Error(`Invalid state: prompt resolves wasn't initialized`);
-		}
-
-		const { href, text } = e.detail;
-		this.promptHyperlinkResolve({ text, href });
-	}
-
-	private onPromptCancel() {
-		if (!this.promptHyperlinkResolve) {
-			throw new Error(`Invalid state: prompt resolves wasn't initialized`);
-		}
-
-		this.promptHyperlinkResolve(undefined);
+	private configureToolbar(options: ToolbarOptions) {
+		this.toolbarEl!.open = options.visible;
+		this.toolbarEl!.x = options.left || 0;
+		this.toolbarEl!.y = options.top || 0;
+		this.toolbarEl!.href = options.href || '';
+		this.toolbarEl!.text = options.text || '';
 	}
 }

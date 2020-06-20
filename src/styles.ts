@@ -104,6 +104,8 @@ export const PROSEMIRROR_STYLES = css`
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 4px;
+    overflow: hidden;
   }
   .ProseMirror-menuitem:hover {
     background-color: #f5f5f5;
@@ -230,7 +232,6 @@ export const PROSEMIRROR_STYLES = css`
     vertical-align: -2px;
     /* Compensate for padding */
     padding: 2px 8px;
-    border-radius: 4px;
     cursor: pointer;
   }
 

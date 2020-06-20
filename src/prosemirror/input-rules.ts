@@ -1,6 +1,6 @@
+import { linkRule } from 'prosemirror-hyperlink';
 import { inputRules, wrappingInputRule, textblockTypeInputRule, smartQuotes, emDash, ellipsis } from 'prosemirror-inputrules';
 import { NodeType, Schema } from 'prosemirror-model';
-import { linkRule } from '../hyperlink/input-rule';
 
 export function blockQuoteRule<S extends Schema>(nodeType: NodeType<S>) {
 	return wrappingInputRule(/^\s*>\s$/, nodeType);
