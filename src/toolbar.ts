@@ -1,7 +1,6 @@
 import { css, html, LitElement, property, query, customElement } from 'lit-element';
 
 import '@material/mwc-menu';
-
 import '@material/mwc-textfield';
 import { TextField } from '@material/mwc-textfield';
 
@@ -29,14 +28,8 @@ export class HyperlinkToolbar extends LitElement {
 	@property({ type: Boolean })
 	public open: boolean = false;
 
-	@property({ type: Number })
-	public x: number = 0;
-
-	@property({ type: Number })
-	public y: number = 0;
-
 	@property({ type: Object })
-	public anchor?: HTMLElement;
+	public anchor?: Node;
 
 	@query('#text')
 	private textEl?: TextField;
@@ -70,9 +63,8 @@ export class HyperlinkToolbar extends LitElement {
 			<mwc-menu
 				.open="${this.open}"
 				.anchor="${this.anchor}"
-				.x="${this.x}"
-				.y="${this.y}"
-				fixed
+				corner="BOTTOM_START"
+				absolute
 				@opened="${this.onOpened}"
 				@closed="${this.onClosed}">
 				<mwc-textfield

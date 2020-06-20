@@ -184,13 +184,8 @@ export class MarkdownEditor extends LitElement {
 	}
 
 	private configureToolbar(options: ToolbarOptions) {
-		// Offset anchor element because Prosemirror coordinates are relative to window viewport
-		const x = options.left ? options.left - this.editorEl!.offsetLeft : 0;
-		const y = options.top ? options.top - this.editorEl!.offsetTop : 0;
-
 		this.toolbarEl!.open = options.visible;
-		this.toolbarEl!.x = x;
-		this.toolbarEl!.y = y;
+		this.toolbarEl!.anchor = options.dom;
 		this.toolbarEl!.href = options.href || '';
 		this.toolbarEl!.text = options.text || '';
 	}
