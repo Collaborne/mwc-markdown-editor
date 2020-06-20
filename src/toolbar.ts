@@ -72,6 +72,7 @@ export class HyperlinkToolbar extends LitElement {
 				.anchor="${this.anchor}"
 				.x="${this.x}"
 				.y="${this.y}"
+				fixed
 				@opened="${this.onOpened}"
 				@closed="${this.onClosed}">
 				<mwc-textfield
