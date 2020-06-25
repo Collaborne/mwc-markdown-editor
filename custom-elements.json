@@ -1,0 +1,66 @@
+{
+	"version": 2,
+	"tags": [
+		{
+			"name": "mwc-markdown-editor",
+			"description": "A markdown editor following Material Design spec",
+			"properties": [
+				{
+					"name": "value",
+					"type": "String",
+					"description": "Markdown content",
+					"default": ""
+				},
+				{
+					"name": "disabled",
+					"type": "Boolean",
+					"description": "Disabled element",
+					"default": "false"
+				}
+			],
+			"events": [
+				{
+					"name": "mwc-markdown-editor-input",
+					"description": "Fires whenever the value in the editor changes"
+				}
+			],
+			"slots": [],
+			"cssProperties": [
+				{
+					"name": "--mdc-theme-primary",
+					"description": "Primary color",
+					"type": "Color"
+				},
+				{
+					"name": "--markdown-editor-outline-idle-border-color",
+					"description": "Outline color without hover/focus",
+					"type": "Color"
+				},
+				{
+					"name": "--markdown-editor-outline-hover-border-color",
+					"description": "Outline color when componened is hovered",
+					"type": "Color"
+				},
+				{
+					"name": "--markdown-editor-outline-focused-border-color",
+					"description": "Outline color when component is focused",
+					"type": "Color"
+				},
+				{
+					"name": "--markdown-editor-prompt-dialog-button-primary-color",
+					"description": "Primary color for the [save] button in the link prompt dialog",
+					"type": "Color"
+				},
+				{
+					"name": "--markdown-editor-typography-anchor-color",
+					"description": "Text color of anchors in the richtext",
+					"type": "Color"
+				},
+				{
+					"name": "--markdown-editor-typography-anchor-text-decoration",
+					"description": "Text decoration for anchors in the richtext"
+				}
+			]
+		}
+	]
+}
